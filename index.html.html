@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Basmalahqu.id — Manajemen Qurban 1447H</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%;height:-webkit-fill-available}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:#F5F4F0;color:#1C1917;font-size:14px;display:flex;flex-direction:column;width:100%;max-width:480px;margin:0 auto;-webkit-font-smoothing:antialiased;min-height:100%;min-height:-webkit-fill-available;overflow:hidden}
+.hdr{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);color:#fff;padding:14px 16px 12px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start}
+.hdr h1{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;letter-spacing:.2px;line-height:1.1}
+.hdr p{font-size:10.5px;opacity:.6;margin-top:3px;font-weight:400;letter-spacing:.3px}
+.hdr-badge{background:rgba(255,255,255,.18);font-size:10px;padding:3px 10px;border-radius:99px;font-weight:600;margin-top:2px;white-space:nowrap;letter-spacing:.2px}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #ECEAE4;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.tab{flex:1;padding:11px 2px 9px;font-size:9.5px;font-weight:700;text-align:center;cursor:pointer;border:none;background:none;color:#A8A29E;border-bottom:2px solid transparent;letter-spacing:.3px;text-transform:uppercase;transition:color .15s}
+.tab.active{color:#2E7D32;border-bottom-color:#2E7D32}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F5F4F0;overscroll-behavior:contain}
+.section{display:none;padding:14px 13px 100px}
+.section.active{display:block}
+/* STAT */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat-card{background:#fff;border-radius:12px;padding:12px 14px;border:1px solid #ECEAE4;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.stat-label{font-size:9.5px;color:#A8A29E;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.stat-val{font-size:18px;font-weight:800;line-height:1.1;letter-spacing:-.3px}
+.sv-green{color:#2E7D32}.sv-red{color:#C62828}.sv-blue{color:#1565C0}.sv-orange{color:#E65100}.sv-gray{color:#555}
+/* SEARCH */
+.search-wrap{display:flex;gap:7px;margin-bottom:10px;align-items:center}
+.search-wrap input{flex:1;border:1.5px solid #E7E5DF;border-radius:10px;padding:10px 12px;font-size:14px;background:#fff;outline:none;color:#1C1917;min-width:0;font-family:inherit;transition:border-color .15s}
+.fbtn{padding:9px 10px;font-size:11px;border-radius:9px;cursor:pointer;border:1px solid #ddd;background:#fff;color:#666;font-weight:600;white-space:nowrap;flex-shrink:0}
+.fbtn.on{background:#E8F5E9;color:#2E7D32;border-color:#A5D6A7}
+/* DOMBA CARD */
+.dcard{background:#fff;border-radius:14px;border:1px solid #ECEAE4;margin-bottom:9px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.dcard.sold{border-color:#A5D6A7;border-left:4px solid #2E7D32}
+.dcard.newstock{border-color:#BFDBFE;border-left:4px solid #1D4ED8}
+.dcard-top{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;user-select:none}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;flex-shrink:0}
+.av-std{background:#E8F5E9;color:#1B5E20}
+.av-tdk{background:#C8E6C9;color:#1B5E20}
+.av-sold{background:#2E7D32;color:#fff}
+.av-new{background:#E3F2FD;color:#1565C0}
+.dcard-info{flex:1;min-width:0}
+.dkode{font-size:15px;font-weight:800}
+.dmeta{font-size:11px;color:#999;margin-top:2px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bdg{display:inline-block;font-size:10px;padding:1px 7px;border-radius:99px;font-weight:700}
+.bdg-tdk{background:#E8F5E9;color:#2E7D32}
+.bdg-non{background:#F0F0F0;color:#888}
+.bdg-new{background:#E3F2FD;color:#1565C0}
+.dcard-right{text-align:right;flex-shrink:0}
+.dprice-main{font-size:15px;font-weight:800;color:#1565C0;white-space:nowrap}
+.dprice-floor{font-size:10px;color:#C62828;margin-top:1px}
+.sold-pill{background:#2E7D32;color:#fff;font-size:10px;padding:3px 9px;border-radius:99px;font-weight:700}
+.sold-deal{font-size:13px;font-weight:800;color:#2E7D32;margin-top:2px}
+.dp-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700;margin-top:3px}
+.dp-lunas{background:#E8F5E9;color:#1B5E20}
+.dp-partial{background:#FFF3E0;color:#E65100}
+.dp-belum{background:#FFEBEE;color:#C62828}
+.dnet-preview{display:flex;flex-direction:column;gap:1px;margin-top:3px;align-items:flex-end}
+.dnp-normal,.dnp-floor{font-size:10px;font-weight:700;white-space:nowrap}
+.c-pos{color:#2E7D32}.c-warn{color:#E65100}.c-neg{color:#C62828}
+/* EXPAND */
+.dexpand{display:none;border-top:1px solid #F0EDE8;background:#FAFAF8;padding:14px}
+.dexpand.open{display:block}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ddet{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #ECEAE4;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ddet-l{font-size:9.5px;color:#A8A29E;margin-bottom:3px;font-weight:600;letter-spacing:.2px}
+.ddet-v{font-size:13px;font-weight:700;letter-spacing:-.1px}
+.ddet-v.blue{color:#1D4ED8}.ddet-v.red{color:#DC2626}
+.net-box{background:#FAFAF8;border-radius:11px;border:1.5px solid #E7E5DF;padding:12px 14px;margin-bottom:11px}
+.net-row{display:flex;justify-content:space-between;align-items:center}
+.net-lbl{font-size:12px;color:#57534E;font-weight:500}
+.net-val{font-size:14px;font-weight:800;white-space:nowrap;margin-left:8px;letter-spacing:-.2px}
+.net-note{font-size:9.5px;color:#B5B0A8;margin-top:9px;line-height:1.6;border-top:1px solid #ECEAE4;padding-top:7px;font-weight:500}
+/* SOLD INFO */
+.sold-info{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:12px;padding:13px;margin-bottom:8px;border:1px solid #BBF7D0}
+.si-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.si-row:last-child{border:none}
+.si-l{font-size:11.5px;color:#57534E;flex-shrink:0;margin-right:10px;font-weight:500}
+.si-r{font-size:13px;font-weight:700;color:#15803D;text-align:right;letter-spacing:-.1px}
+/* FORM */
+.form-box{background:#fff;border-radius:10px;border:1px solid #eee;padding:12px}
+.form-title{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.form-row{margin-bottom:8px}
+.form-row label{font-size:11px;color:#666;display:block;margin-bottom:4px;font-weight:600}
+.form-row input{width:100%;border:1.5px solid #E7E5DF;border-radius:9px;padding:10px 12px;font-size:14px;background:#FAFAF8;outline:none;color:#1C1917;font-family:inherit;transition:border-color .15s}
+.form-row input:focus{border-color:#2E7D32;background:#fff;box-shadow:0 0 0 3px rgba(46,125,50,.08)}
+.form-hint{font-size:10px;color:#B5B0A8;margin-top:4px;font-weight:500}
+.btn-row{display:flex;gap:7px;margin-top:10px}
+.btn-primary{flex:1;padding:12px;background:#2E7D32;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.1px;box-shadow:0 2px 8px rgba(46,125,50,.25)}
+.btn-secondary{padding:12px 14px;background:#F5F4F0;color:#78716C;border:1.5px solid #E7E5DF;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-inv{width:100%;padding:10px;background:#1565C0;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;display:block}
+.btn-batal-sold{width:100%;padding:9px;background:#fff;color:#C62828;border:1px solid #FFCDD2;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;margin-top:5px;display:block}
+/* SAPI */
+.info-card{background:#fff;border-radius:14px;border:1px solid #ECEAE4;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 5px rgba(0,0,0,.04)}
+.ic-title{font-size:9.5px;font-weight:700;color:#A8A29E;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+.ic-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f5f5f5}
+.ic-row:last-child{border:none}
+.ic-l{font-size:13px;color:#666}
+.ic-r{font-size:14px;font-weight:700}
+.pill-conf{background:#E8F5E9;color:#2E7D32;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:700;margin-left:5px}
+.pill-est{background:#FFF3E0;color:#E65100;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:700;margin-left:5px}
+/* INVOICE */
+.inv-card{background:#fff;border-radius:12px;border:1px solid #eee;margin-bottom:8px;overflow:hidden}
+.inv-header{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;cursor:pointer}
+.inv-kode{font-size:15px;font-weight:800}
+.inv-sub{font-size:11px;color:#999;margin-top:2px}
+.inv-sbadge{font-size:10px;padding:3px 10px;border-radius:99px;font-weight:700;flex-shrink:0}
+.isb-lunas{background:#E8F5E9;color:#1B5E20}
+.isb-dp{background:#FFF3E0;color:#E65100}
+.isb-belum{background:#FFEBEE;color:#C62828}
+.inv-body{border-top:1px solid #f5f5f5;padding:12px 13px;background:#F8F9F7;display:none}
+.inv-body.open{display:block}
+.inv-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee;font-size:13px}
+.inv-row:last-child{border:none}
+.inv-row-l{color:#666}
+.inv-row-r{font-weight:700;text-align:right;max-width:60%}
+.btn-cetak{width:100%;padding:11px;background:#1565C0;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;margin-top:10px}
+/* PENGANTARAN */
+.antar-hero{background:linear-gradient(135deg,#1E3A8A,#1D4ED8);color:#fff;border-radius:14px;padding:15px;margin-bottom:10px;box-shadow:0 3px 12px rgba(29,78,216,.25)}
+.antar-hero h3{font-size:14px;font-weight:800}
+.antar-hero p{font-size:11px;opacity:.7;margin-top:3px}
+.antar-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.antar-stat{background:rgba(255,255,255,.15);border-radius:8px;padding:8px;text-align:center}
+.antar-stat .as-val{font-size:16px;font-weight:800}
+.antar-stat .as-lbl{font-size:10px;opacity:.7;margin-top:1px}
+.antar-card{background:#fff;border-radius:12px;border:1px solid #eee;margin-bottom:8px;overflow:hidden}
+.antar-row{display:flex;align-items:flex-start;gap:12px;padding:12px 13px;position:relative}
+.antar-num{width:26px;height:26px;border-radius:50%;background:#1565C0;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.antar-num.done{background:#2E7D32}
+.antar-num.ambil{background:#9E9E9E}
+.antar-info{flex:1;min-width:0}
+.antar-buyer{font-size:14px;font-weight:700}
+.antar-kode{font-size:11px;color:#999;margin-top:1px}
+.antar-addr{font-size:12px;color:#E65100;margin-top:4px;line-height:1.4}
+.antar-addr-ambil{font-size:12px;color:#888;margin-top:4px}
+.antar-dp-info{margin-top:5px}
+.antar-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.antar-harga{font-size:13px;font-weight:800;color:#1565C0}
+.antar-sisa{font-size:11px;color:#C62828;font-weight:600}
+.antar-lunas{font-size:11px;color:#2E7D32;font-weight:600}
+.btn-maps{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;background:#E3F2FD;color:#1565C0;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn-maps-all{display:block;width:100%;padding:12px;background:#1565C0;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:10px}
+.antar-separator{display:flex;align-items:center;gap:8px;margin:4px 0 4px 13px}
+.antar-line{flex:1;height:1px;background:#e0e0e0}
+.antar-line-dot{width:8px;height:8px;border-radius:50%;background:#ddd;flex-shrink:0}
+.nodata{padding:3rem 1rem;text-align:center;color:#ccc;font-size:13px}
+/* PL */
+.pl-card{background:#fff;border-radius:14px;border:1px solid #ECEAE4;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 5px rgba(0,0,0,.04)}
+.pl-title{font-size:9.5px;font-weight:700;color:#A8A29E;text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+.pl-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #F5F4F0;font-size:13px}
+.pl-row:last-child{border:none}
+.pl-l{color:#78716C;font-weight:500}.pl-r{font-weight:700;letter-spacing:-.2px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div><h1>Basmalahqu.id</h1><p>Hewan Qurban · Idul Adha 1447H / 2026</p></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+      <div class="hdr-badge" id="hdr-info">0/31 laku</div>
+      <div id="hdr-saved" style="font-size:9px;opacity:.5;cursor:pointer" onclick="confirmReset()">💾 tersimpan</div>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP BANNER — hilang otomatis setelah BIN_ID diisi -->
+<div id="setup-banner" style="background:#FEF3C7;border-bottom:1px solid #FCD34D;padding:10px 14px;font-size:12px;display:none">
+  <b>⚙️ Satu langkah lagi</b> — Ikuti panduan di bawah untuk aktifkan sync cloud 🔗
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('domba')">🐑 Domba</button>
+  <button class="tab" onclick="showTab('sapi')">🐄 Sapi</button>
+  <button class="tab" onclick="showTab('invoice')">🧾 Invoice</button>
+  <button class="tab" onclick="showTab('antar')">🚚 Antar</button>
+  <button class="tab" onclick="showTab('pl')">📊 P&amp;L</button>
+</div>
+
+<div class="scroll-area">
+
+  <!-- TAB DOMBA -->
+  <div id="tab-domba" class="section active">
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Cari kode / nomor..." onkeydown="if(event.key==='Enter')renderDomba()" oninput="if(!this.value)renderDomba()">
+      <button class="fbtn" id="btn-cari" onclick="renderDomba()" style="background:#2E7D32;color:#fff;border-color:#2E7D32;flex-shrink:0">🔍</button>
+      <button class="fbtn" id="btn-tdk" onclick="toggleF('tdk')">Tanduk</button>
+      <button class="fbtn" id="btn-sold" onclick="toggleF('sold')">Laku</button>
+    </div>
+    <div class="stats-grid" id="stats"></div>
+    <div id="domba-list"></div>
+  </div>
+
+  <!-- TAB SAPI -->
+  <div id="tab-sapi" class="section">
+    <div class="info-card">
+      <div class="ic-title">Pemasukan dari Sapi</div>
+      <div class="ic-row"><span class="ic-l">Sudah masuk <span class="pill-conf">CONFIRMED</span></span><span class="ic-r sv-green">Rp 5.000.000</span></div>
+      <div class="ic-row"><span class="ic-l">Estimasi masuk <span class="pill-est">ESTIMASI</span></span><span class="ic-r sv-orange">Rp 13.000.000</span></div>
+      <div class="ic-row" style="padding-top:8px"><span class="ic-l" style="font-weight:700;color:#1a1a1a">Total proyeksi sapi</span><span class="ic-r sv-green" style="font-size:16px">Rp 18.000.000</span></div>
+    </div>
+    <div class="info-card">
+      <div class="ic-title">Kontribusi ke Operasional</div>
+      <div class="ic-row"><span class="ic-l">Opex kandang total</span><span class="ic-r sv-red">Rp 25.000.000</span></div>
+      <div class="ic-row"><span class="ic-l">Ditutup sapi (confirmed)</span><span class="ic-r sv-green">Rp 5.000.000</span></div>
+      <div class="ic-row"><span class="ic-l">Ditutup sapi (estimasi)</span><span class="ic-r sv-orange">Rp 13.000.000</span></div>
+      <div class="ic-row" style="padding-top:8px"><span class="ic-l" style="font-weight:700;color:#1a1a1a">Sisa opex dari domba</span><span class="ic-r sv-red" style="font-size:16px">Rp 7.000.000</span></div>
+    </div>
+    <div class="info-card">
+      <div class="ic-title">Domba Baru dari Jawa (Stok Tambahan)</div>
+      <div class="ic-row"><span class="ic-l">Bobot</span><span class="ic-r">78 kg</span></div>
+      <div class="ic-row"><span class="ic-l">Harga beli (Rp 70.000/kg)</span><span class="ic-r">Rp 5.460.000</span></div>
+      <div class="ic-row"><span class="ic-l">Ongkir dari Jawa</span><span class="ic-r">Rp 100.000</span></div>
+      <div class="ic-row"><span class="ic-l">HPP total</span><span class="ic-r sv-red">Rp 5.560.000</span></div>
+      <div class="ic-row"><span class="ic-l">Harga jual normal (120rb/kg)</span><span class="ic-r sv-blue">Rp 9.360.000</span></div>
+      <div class="ic-row"><span class="ic-l">Harga floor (105rb/kg)</span><span class="ic-r">Rp 8.190.000</span></div>
+      <div class="ic-row" style="padding-top:8px"><span class="ic-l" style="font-weight:700;color:#1a1a1a">Gross margin (harga normal)</span><span class="ic-r sv-green" style="font-size:16px">Rp 3.800.000</span></div>
+    </div>
+  </div>
+
+  <!-- TAB INVOICE -->
+  <div id="tab-invoice" class="section">
+    <div id="inv-container"><div class="nodata">Belum ada domba yang laku.<br>Tandai dulu di tab Domba.</div></div>
+  </div>
+
+  <!-- TAB PENGANTARAN -->
+  <div id="tab-antar" class="section">
+    <div id="antar-container"><div class="nodata">Belum ada domba yang laku.</div></div>
+  </div>
+
+  <!-- TAB P&L -->
+  <div id="tab-pl" class="section">
+    <div class="stats-grid" id="pl-stats"></div>
+    <div id="pl-body"></div>
+  </div>
+
+</div>
+
+<script>
+// ── KONSTANTA ─────────────────────────────────────────────────────────
+const HB_NON=57000,HB_TDK=65000,ONGKIR=25000,PAKAN=75000,OPEX=25000000;
+const HJ_NON=110000,HJ_TDK=120000,FL_NON=100000,FL_TDK=105000;
+
+// ── DATA 30 EKOR ──────────────────────────────────────────────────────
+const RAW=[
+  [1,"R20",25.0,0],[2,"L98",27.5,0],[3,"20",26.5,0],[4,"L84",26.2,0],
+  [5,"L48",28.2,0],[6,"46",26.7,0],[7,"34",24.3,0],[8,"07",20.9,0],
+  [9,"35",24.1,0],[10,"10",23.5,0],[11,"30",26.0,0],[12,"02",29.0,0],
+  [13,"04",27.3,1],[14,"P20",27.2,0],[15,"28",23.0,0],[16,"N16",25.1,0],
+  [17,"K70",26.7,0],[18,"N3L26",23.0,0],[19,"38",20.2,0],[20,"WI64",25.5,0],
+  [21,"WI19",27.4,0],[22,"25",25.0,0],[23,"N23",22.7,0],[24,"-13T",24.8,1],
+  [25,"-43T",30.7,1],[26,"-40T",25.5,1],[27,"DR14",22.2,0],[28,"BR9",25.9,0],
+  [29,"P62",23.0,1],[30,"P61",25.0,1]
+];
+
+// Build DOMBA array — semua kalkulasi di satu tempat
+const DOMBA=RAW.map(([no,kode,bobot,tdk])=>{
+  const hb=tdk?HB_TDK:HB_NON, hj=tdk?HJ_TDK:HJ_NON, fl=tdk?FL_TDK:FL_NON;
+  const hppBeli=Math.round(bobot*hb);
+  const hpp=Math.round(bobot*hb+ONGKIR+PAKAN);
+  const jNorm=Math.round(bobot*hj);
+  const jFloor=Math.round(bobot*fl);
+  const netNorm=Math.round(jNorm-hpp-OPEX/30);
+  const netFloor=Math.round(jFloor-hpp-OPEX/30);
+  return{no,kode,bobot,tdk,isNew:false,hb,hj,fl,hppBeli,hpp,jNorm,jFloor,netNorm,netFloor};
+});
+
+// Domba Jawa — TANDUK, harga beli 70rb/kg dari supplier, tanpa pakan
+(()=>{
+  const hppBeli=70000*78;        // 5.460.000
+  const hpp=70000*78+100000;     // 5.560.000 (+ ongkir, tanpa pakan)
+  const jNorm=Math.round(78*HJ_TDK);   // 78×120.000 = 9.360.000
+  const jFloor=Math.round(78*FL_TDK);  // 78×105.000 = 8.190.000
+  DOMBA.push({no:31,kode:"JAWA-78",bobot:78,tdk:1,isNew:true,
+    hb:70000,hj:HJ_TDK,fl:FL_TDK,hppBeli,hpp,jNorm,jFloor,
+    netNorm:Math.round(jNorm-hpp-OPEX/30),
+    netFloor:Math.round(jFloor-hpp-OPEX/30)
+  });
+})();
+
+// Domba Bundling — 2 ekor × 35kg, harga deal 5jt (sudah fixed)
+(()=>{
+  const ekor=2, bobotPer=35.0, totalBobot=ekor*bobotPer;   // 70kg
+  const hppPer=Math.round(bobotPer*HB_NON+ONGKIR+PAKAN);   // per ekor
+  const hpp=hppPer*ekor;                                     // 4.190.000
+  const hppBeli=Math.round(bobotPer*HB_NON)*ekor;
+  const jNorm=Math.round(totalBobot*HJ_NON);   // 7.700.000 (referensi harga normal)
+  const jFloor=Math.round(totalBobot*FL_NON);  // 7.000.000
+  const opexPorsi=Math.round(OPEX/30*ekor);
+  DOMBA.push({no:32,kode:"BUNDLING-2",bobot:totalBobot,tdk:0,isNew:true,
+    isBundling:true,ekor:ekor,bobotPer:bobotPer,
+    hb:HB_NON,hj:HJ_NON,fl:FL_NON,hppBeli,hpp,jNorm,jFloor,
+    netNorm:Math.round(jNorm-hpp-opexPorsi),
+    netFloor:Math.round(jFloor-hpp-opexPorsi)
+  });
+})();
+
+// ── CLOUD STORAGE via Google Apps Script ─────────────────────────────
+// Data tersimpan di Google Sheets — semua HP sync otomatis
+// GAS_URL diisi setelah deploy Apps Script (lihat panduan)
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwaWwD5wkS0viooYSrpZyCLAte-7zc35PIbKWB03AZlLEpUGT7Fe71jbMw9NZ7aSt8gKA/exec';
+
+let syncTimer=null, lastSyncTime=null, isSyncing=false;
+
+async function cloudLoad(){
+  setStatus('loading');
+  try{
+    const res=await fetch(GAS_URL+'?action=load',{cache:'no-store'});
+    if(!res.ok) throw new Error(res.status);
+    const data=await res.json();
+    const s=data.sold||{};
+    Object.keys(sold).forEach(k=>delete sold[k]);
+    Object.keys(s).forEach(k=>{sold[k]=s[k];});
+    lastSyncTime=new Date();
+    setStatus('synced');
+    return true;
+  } catch(e){
+    try{
+      const raw=localStorage.getItem('basmalahqu_v1');
+      if(raw){const s=JSON.parse(raw);Object.keys(s).forEach(k=>{sold[k]=s[k];});}
+    }catch(e2){}
+    setStatus('offline');
+    return false;
+  }
+}
+
+async function cloudSave(){
+  if(isSyncing) return;
+  isSyncing=true;
+  setStatus('saving');
+  try{localStorage.setItem('basmalahqu_v1',JSON.stringify(sold));}catch(e){}
+  try{
+    const res=await fetch(GAS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'save',sold})
+    });
+    if(!res.ok) throw new Error(res.status);
+    lastSyncTime=new Date();
+    setStatus('synced');
+  } catch(e){
+    setStatus('offline');
+  }
+  isSyncing=false;
+}
+
+function saveSold(){
+  setStatus('pending');
+  try{localStorage.setItem('basmalahqu_v1',JSON.stringify(sold));}catch(e){}
+  if(syncTimer) clearTimeout(syncTimer);
+  syncTimer=setTimeout(cloudSave,1200);
+}
+
+function setStatus(state){
+  const el=document.getElementById('hdr-saved');
+  if(!el) return;
+  const n=Object.keys(sold).length;
+  const t=lastSyncTime?lastSyncTime.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'';
+  const map={loading:'🔄 memuat...',saving:'☁️ menyimpan...',synced:'✅ sync'+(n?' · '+n+' data'+(t?' · '+t:''):''),pending:'⏳ menunggu...',offline:'⚠️ offline'};
+  el.textContent=map[state]||'';
+}
+
+function startAutoRefresh(){
+  setInterval(async()=>{
+    if(document.hidden||isSyncing) return;
+    const before=JSON.stringify(sold);
+    await cloudLoad();
+    if(JSON.stringify(sold)!==before){
+      renderDomba(); renderInvoice(); renderAntar(); renderPL(); updateSavedIndicator();
+    }
+  },30000);
+}
+
+const sold={};
+const editing={};
+let expanded=null, fTdk=false, fSold=false;
+
+// ── FORMAT ────────────────────────────────────────────────────────────
+const rp=v=>'Rp '+Math.round(v).toLocaleString('id-ID');
+
+// Format input angka dengan titik ribuan
+function fmtInput(v){
+  const n=parseInt(String(v).replace(/\D/g,''))||0;
+  return n?n.toLocaleString('id-ID'):'';
+}
+function parseRp(el){
+  return parseInt(el.value.replace(/\D/g,''))||0;
+}
+function liveFormat(el){
+  const pos=el.selectionStart;
+  const raw=el.value.replace(/\D/g,'');
+  const n=parseInt(raw)||0;
+  const formatted=n?n.toLocaleString('id-ID'):'';
+  el.value=formatted;
+  // Warn di harga deal saja
+  const id=el.id;
+  if(id&&id.startsWith('f-harga-')){
+    const no=parseInt(id.replace('f-harga-',''));
+    const d=DOMBA.find(x=>x.no===no);
+    const warn=document.getElementById('f-warn-'+no);
+    if(d&&warn){
+      if(n>0&&n<d.jFloor){
+        warn.innerHTML='⚠️ Di bawah floor ('+rp(d.jFloor)+') — pastikan sudah sesuai';
+        warn.style.color='#DC2626';warn.style.fontWeight='600';
+      } else if(n>0&&n<d.jNorm){
+        warn.innerHTML='📉 Di bawah normal · Floor: '+rp(d.jFloor)+' · Normal: '+rp(d.jNorm);
+        warn.style.color='#E65100';warn.style.fontWeight='500';
+      } else {
+        warn.innerHTML='Normal: '+rp(d.jNorm)+' · Floor: '+rp(d.jFloor);
+        warn.style.color='';warn.style.fontWeight='';
+      }
+    }
+  }
+}
+
+// ── FILTER ────────────────────────────────────────────────────────────
+function toggleF(t){
+  if(t==='tdk'){fTdk=!fTdk;document.getElementById('btn-tdk').classList.toggle('on',fTdk);}
+  else{fSold=!fSold;document.getElementById('btn-sold').classList.toggle('on',fSold);}
+  renderDomba();
+}
+function filtered(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  return DOMBA.filter(d=>{
+    if(fTdk&&!d.tdk)return false;
+    if(fSold&&!sold[d.no])return false;
+    if(q&&!d.kode.toLowerCase().includes(q)&&!String(d.no).includes(q))return false;
+    return true;
+  });
+}
+
+// ── RENDER DOMBA ──────────────────────────────────────────────────────
+function renderDomba(){
+  const list=filtered();
+  const soldCount=DOMBA.filter(d=>sold[d.no]).length;
+  document.getElementById('hdr-info').textContent=`${soldCount}/${DOMBA.length} laku`;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Tampil</div><div class="stat-val sv-gray">${list.length} ekor</div></div>
+    <div class="stat-card"><div class="stat-label">Sudah laku</div><div class="stat-val sv-green">${soldCount} ekor</div></div>
+    <div class="stat-card"><div class="stat-label">Total bobot</div><div class="stat-val sv-gray" style="font-size:15px">${list.reduce((s,d)=>s+d.bobot,0).toFixed(1)} kg</div></div>
+    <div class="stat-card"><div class="stat-label">Proyeksi rev</div><div class="stat-val sv-blue" style="font-size:12px">${rp(list.reduce((s,d)=>s+d.jNorm,0))}</div></div>`;
+  document.getElementById('domba-list').innerHTML=list.map(d=>cardHTML(d)).join('');
+}
+
+function cardHTML(d){
+  const s=sold[d.no];
+  const isExp=expanded===d.no;
+  const dp=s?s.dp:0;
+  const sisa=s?s.harga-dp:0;
+
+  // DP badge
+  let dpTag='';
+  if(s){
+    if(dp>=s.harga) dpTag='<span class="dp-tag dp-lunas">LUNAS</span>';
+    else if(dp>0)   dpTag=`<span class="dp-tag dp-partial">DP ${rp(dp)}</span>`;
+    else            dpTag='<span class="dp-tag dp-belum">BELUM DP</span>';
+  }
+
+  // Avatar
+  const avClass=s?'av-sold':d.isNew?'av-new':d.tdk?'av-tdk':'av-std';
+  const avText =s?'✓':d.isNew?'NEW':d.kode.slice(0,3);
+
+  // Right side of card top
+  const rightHTML=s
+    ?`<div class="sold-pill">LAKU</div><div class="sold-deal">${rp(s.harga)}</div>${dpTag}`
+    :`<div class="dprice-main">${rp(d.jNorm)}</div>
+      <div class="dprice-floor">Floor: ${rp(d.jFloor)}</div>
+      <div class="dnet-preview">
+        <span class="dnp-normal ${d.netNorm>=0?'c-pos':'c-neg'}">N: ${rp(d.netNorm)}</span>
+        <span class="dnp-floor ${d.netFloor>=0?'c-warn':'c-neg'}">F: ${d.netFloor>=0?rp(d.netFloor):'⚠️'+rp(d.netFloor)}</span>
+      </div>`;
+
+  // Expand content
+  let expandContent='';
+  if(isExp){
+    const detailGrid=`
+      <div class="dgrid">
+        <div class="ddet"><div class="ddet-l">${d.isBundling?'HPP beli ('+d.ekor+'×'+d.bobotPer+'kg)':'HPP beli (timbang)'}</div><div class="ddet-v">${rp(d.hppBeli)}</div></div>
+        <div class="ddet"><div class="ddet-l">Harga jual normal</div><div class="ddet-v blue">${rp(d.jNorm)}</div></div>
+        <div class="ddet"><div class="ddet-l">Harga floor</div><div class="ddet-v red">${rp(d.jFloor)}</div></div>
+        <div class="ddet"><div class="ddet-l">Harga beli/kg</div><div class="ddet-v">${rp(d.hb)}/kg</div></div>
+      </div>
+      <div class="net-box">
+        <div class="net-row">
+          <span class="net-lbl">Net jual <b>NORMAL</b> (${rp(d.jNorm)})</span>
+          <span class="net-val ${d.netNorm>=0?'sv-green':'sv-red'}">${rp(d.netNorm)}</span>
+        </div>
+        <div class="net-row" style="margin-top:6px">
+          <span class="net-lbl">Net jual <b>FLOOR</b> (${rp(d.jFloor)})</span>
+          <span class="net-val ${d.netFloor>=0?'sv-orange':'sv-red'}">${d.netFloor>=0?rp(d.netFloor):'⚠️ '+rp(d.netFloor)+' RUGI'}</span>
+        </div>
+        <div class="net-note">Sudah termasuk: ongkir Rp 25rb · pakan Rp 75rb · opex Rp ${Math.round(OPEX/30).toLocaleString('id-ID')}/ekor</div>
+      </div>`;
+
+    if(s && !editing[d.no]){
+      // Sudah laku — tampilkan info + tombol edit
+      expandContent=detailGrid+`
+      <div class="sold-info">
+        <div class="si-row"><span class="si-l">Pembeli</span><span class="si-r">${s.buyer||'—'}</span></div>
+        <div class="si-row"><span class="si-l">No HP</span><span class="si-r">${s.hp||'—'}</span></div>
+        <div class="si-row"><span class="si-l">Alamat kirim</span><span class="si-r" style="font-size:12px">${s.alamat||'Ambil sendiri'}</span></div>
+        <div class="si-row"><span class="si-l">Harga deal</span><span class="si-r">${rp(s.harga)}</span></div>
+        <div class="si-row"><span class="si-l">DP dibayar</span><span class="si-r">${rp(dp)}</span></div>
+        <div class="si-row"><span class="si-l" style="font-weight:700;color:#1a1a1a">Sisa pelunasan</span><span class="si-r" style="font-size:15px">${rp(sisa)}</span></div>
+        ${s.catatan?`<div class="si-row"><span class="si-l">Catatan</span><span class="si-r" style="font-size:12px">${s.catatan}</span></div>`:''}
+      </div>
+      <div style="display:flex;gap:7px">
+        <button class="btn-inv" style="flex:1" onclick="cetakInvoice(${d.no})">🧾 Cetak Invoice</button>
+        <button class="btn-inv" style="background:#25D366;flex:0 0 auto;padding:10px 14px" onclick="shareWA(${d.no})" title="Share via WA">📤 WA</button>
+      </div>
+      <button class="btn-batal-sold" style="background:#FFF8E1;color:#E65100;border-color:#FFE082" onclick="editSold(${d.no})">✏️ Edit Data</button>
+      <button class="btn-batal-sold" onclick="batalSold(${d.no})">🗑️ Hapus Data</button>`;
+    } else {
+      // Form: bisa dari belum laku, atau mode edit (prefill data lama)
+      const isEdit=!!(s&&editing[d.no]);
+      const pre=isEdit?s:{buyer:'',hp:'',harga:'',dp:'',alamat:'',catatan:''};
+      expandContent=detailGrid+`
+      <div class="form-box">
+        <div class="form-title" style="color:${isEdit?'#E65100':'#999'}">${isEdit?'✏️ EDIT DATA LAKU':'Tandai Laku'}</div>
+        <div class="form-row">
+          <label>Nama Pembeli</label>
+          <input type="text" id="f-buyer-${d.no}" placeholder="Contoh: Bapak Ahmad" value="${pre.buyer||''}">
+        </div>
+        <div class="form-row">
+          <label>Nomor HP Pembeli</label>
+          <input type="tel" id="f-hp-${d.no}" placeholder="08xxxxxxxxxx" value="${pre.hp||''}">
+        </div>
+        <div class="form-row">
+          <label>Harga Deal (Rp)</label>
+          <input type="text" inputmode="numeric" id="f-harga-${d.no}" placeholder="Contoh: 2.750.000" value="${pre.harga?fmtInput(pre.harga):''}" oninput="liveFormat(this)" style="font-size:16px;font-weight:600;letter-spacing:.3px">
+          <div class="form-hint" id="f-warn-${d.no}">${d.isBundling?'Bundling '+d.ekor+' ekor · ':''} Normal: ${rp(d.jNorm)} · Floor: ${rp(d.jFloor)}</div>
+        </div>
+        <div class="form-row">
+          <label>Nominal DP (kosongkan jika belum DP)</label>
+          <input type="text" inputmode="numeric" id="f-dp-${d.no}" placeholder="0" value="${pre.dp?fmtInput(pre.dp):''}" oninput="liveFormat(this)">
+        </div>
+        <div class="form-row">
+          <label>Alamat Pengiriman</label>
+          <input type="text" id="f-alamat-${d.no}" placeholder="Jl. Mawar No.5, Ciputat, Tangsel" value="${pre.alamat||''}">
+          <div class="form-hint">Kosongkan jika ambil sendiri ke kandang</div>
+        </div>
+        <div class="form-row">
+          <label>Catatan (opsional)</label>
+          <input type="text" id="f-cat-${d.no}" placeholder="Contoh: antar H-1 Lebaran" value="${pre.catatan||''}">
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="${isEdit?'simpanEdit':'markSold'}(${d.no})">${isEdit?'💾 Simpan':'✓ Laku'}</button>
+          <button class="btn-secondary" onclick="${isEdit?'batalEdit':'toggleCard'}(${d.no})">Batal</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  return `<div class="dcard${s?' sold':''}${d.isNew?' newstock':''}">
+    <div class="dcard-top" onclick="toggleCard(${d.no})">
+      <div class="avatar ${avClass}">${avText}</div>
+      <div class="dcard-info">
+        <div class="dkode">${d.kode} <span style="font-size:11px;font-weight:400;color:#bbb">#${d.no}</span></div>
+        <div class="dmeta">
+          <span>${d.isBundling?d.ekor+'×'+d.bobotPer+'kg='+d.bobot+'kg':d.bobot.toFixed(1)+' kg'}</span>
+          <span class="bdg ${d.tdk?'bdg-tdk':'bdg-non'}">${d.tdk?'Tanduk':'Non tanduk'}</span>
+          ${d.isBundling?'<span class="bdg bdg-new">Bundling '+d.ekor+'ekor</span>':d.isNew?'<span class="bdg bdg-new">Stok baru</span>':''}
+        </div>
+        ${s?`<div style="margin-top:3px">${dpTag}</div>`:''}
+        ${s&&s.buyer?`<div style="font-size:11px;color:#555;margin-top:2px">${s.buyer}</div>`:''}
+      </div>
+      <div class="dcard-right">${rightHTML}</div>
+    </div>
+    ${isExp?`<div class="dexpand open">${expandContent}</div>`:''}
+  </div>`;
+}
+
+function toggleCard(no){expanded=(expanded===no?null:no);renderDomba();}
+
+// ── MARK SOLD ─────────────────────────────────────────────────────────
+function markSold(no){
+  const harga=parseRp(document.getElementById('f-harga-'+no));
+  if(!harga){alert('Masukkan harga deal terlebih dahulu!');return;}
+  const buyer  =document.getElementById('f-buyer-'+no).value.trim();
+  const hp     =document.getElementById('f-hp-'+no).value.trim();
+  const dp     =parseRp(document.getElementById('f-dp-'+no));
+  const alamat =document.getElementById('f-alamat-'+no).value.trim();
+  const catatan=document.getElementById('f-cat-'+no).value.trim();
+  sold[no]={harga,buyer,hp,dp,alamat,catatan};
+  saveSold();
+  expanded=no;
+  renderDomba();
+  renderInvoice();
+  renderAntar();
+  renderPL();
+  updateSavedIndicator();
+}
+
+function editSold(no){
+  // Simpan data lama ke state edit, buka form prefill
+  editing[no]=true;
+  expanded=no;
+  renderDomba();
+}
+
+function batalSold(no){
+  if(!confirm('Hapus data laku domba ini secara permanen?'))return;
+  delete sold[no];
+  delete editing[no];
+  saveSold();
+  expanded=null;
+  renderDomba();
+  renderInvoice();
+  renderAntar();
+  renderPL();
+  updateSavedIndicator();
+}
+
+function simpanEdit(no){
+  const harga=parseRp(document.getElementById('f-harga-'+no));
+  if(!harga){alert('Masukkan harga deal!');return;}
+  const buyer  =document.getElementById('f-buyer-'+no).value.trim();
+  const hp     =document.getElementById('f-hp-'+no).value.trim();
+  const dp     =parseRp(document.getElementById('f-dp-'+no));
+  const alamat =document.getElementById('f-alamat-'+no).value.trim();
+  const catatan=document.getElementById('f-cat-'+no).value.trim();
+  sold[no]={harga,buyer,hp,dp,alamat,catatan};
+  saveSold();
+  delete editing[no];
+  expanded=no;
+  renderDomba();
+  renderInvoice();
+  renderAntar();
+  renderPL();
+  updateSavedIndicator();
+}
+
+function batalEdit(no){
+  delete editing[no];
+  expanded=no;
+  renderDomba();
+}
+
+// ── RENDER INVOICE ────────────────────────────────────────────────────
+function renderInvoice(){
+  const soldList=DOMBA.filter(d=>sold[d.no]);
+  if(!soldList.length){
+    document.getElementById('inv-container').innerHTML='<div class="nodata">Belum ada domba yang laku.<br>Tandai dulu di tab Domba.</div>';
+    return;
+  }
+  document.getElementById('inv-container').innerHTML=soldList.map(d=>{
+    const s=sold[d.no];
+    const dp=s.dp||0, sisa=s.harga-dp;
+    let badge,bClass;
+    if(dp>=s.harga){badge='LUNAS';bClass='isb-lunas';}
+    else if(dp>0)  {badge=`DP ${rp(dp)}`;bClass='isb-dp';}
+    else           {badge='BELUM DP';bClass='isb-belum';}
+    const key='inv'+d.no, isOpen=expanded===key;
+    return`<div class="inv-card">
+      <div class="inv-header" onclick="toggleInv(${d.no})">
+        <div>
+          <div class="inv-kode">${d.kode} <span style="font-size:11px;font-weight:400;color:#bbb">#${d.no} · ${d.bobot.toFixed(1)} kg</span></div>
+          <div class="inv-sub">${s.buyer||'—'} · ${s.hp||'—'}</div>
+          ${s.alamat?`<div class="inv-sub" style="color:#E65100;margin-top:2px">📍 ${s.alamat}</div>`:''}
+        </div>
+        <span class="inv-sbadge ${bClass}">${badge}</span>
+      </div>
+      <div class="inv-body${isOpen?' open':''}">
+        <div class="inv-row"><span class="inv-row-l">Harga deal</span><span class="inv-row-r sv-blue">${rp(s.harga)}</span></div>
+        <div class="inv-row"><span class="inv-row-l">DP dibayar</span><span class="inv-row-r sv-green">${rp(dp)}</span></div>
+        <div class="inv-row"><span class="inv-row-l">Sisa pelunasan</span><span class="inv-row-r ${sisa>0?'sv-red':'sv-green'}">${rp(sisa)}</span></div>
+        <div class="inv-row"><span class="inv-row-l">Alamat</span><span class="inv-row-r">${s.alamat||'Ambil sendiri'}</span></div>
+        ${s.catatan?`<div class="inv-row"><span class="inv-row-l">Catatan</span><span class="inv-row-r">${s.catatan}</span></div>`:''}
+        <div style="display:flex;gap:7px;margin-top:10px">
+          <button class="btn-cetak" style="flex:1" onclick="cetakInvoice(${d.no})">🧾 Cetak Invoice</button>
+          <button class="btn-cetak" style="background:#25D366;flex:0 0 auto;padding:11px 14px" onclick="shareWA(${d.no})" title="Share via WA">📤 WA</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleInv(no){expanded=expanded===('inv'+no)?null:'inv'+no;renderInvoice();}
+
+// ── RENDER PENGANTARAN ────────────────────────────────────────────────
+function renderAntar(){
+  const soldList=DOMBA.filter(d=>sold[d.no]);
+  const container=document.getElementById('antar-container');
+  if(!soldList.length){
+    container.innerHTML='<div class="nodata">Belum ada domba yang laku.</div>';
+    return;
+  }
+
+  // Pisah: yang antar vs ambil sendiri
+  const antar=soldList.filter(d=>sold[d.no].alamat);
+  const ambil=soldList.filter(d=>!sold[d.no].alamat);
+  const totalAntar=antar.length, totalAmbil=ambil.length;
+  const totalSisa=soldList.reduce((s,d)=>s+(sold[d.no].harga-(sold[d.no].dp||0)),0);
+
+  // Tombol buka semua rute di Google Maps (waypoints)
+  let mapsAllBtn='';
+  if(antar.length>0){
+    // Google Maps multi-stop: origin=kandang, waypoints=semua alamat antar
+    const origin='Kandang+Basmalahqu,Tangerang+Selatan';
+    const addrs=antar.map(d=>encodeURIComponent(sold[d.no].alamat));
+    let mapsUrl;
+    if(addrs.length===1){
+      mapsUrl=`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${addrs[0]}&travelmode=driving`;
+    } else {
+      const dest=addrs[addrs.length-1];
+      const waypoints=addrs.slice(0,-1).join('|');
+      mapsUrl=`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&waypoints=${waypoints}&travelmode=driving`;
+    }
+    mapsAllBtn=`<a href="${mapsUrl}" target="_blank" class="btn-maps-all">🗺️ Buka Semua Rute di Google Maps (${antar.length} tujuan)</a>`;
+  }
+
+  // Hero stats
+  const hero=`<div class="antar-hero">
+    <h3>🚚 Rencana Pengantaran</h3>
+    <p>Urutkan dari terdekat untuk efisiensi</p>
+    <div class="antar-stats">
+      <div class="antar-stat"><div class="as-val">${totalAntar}</div><div class="as-lbl">Diantar</div></div>
+      <div class="antar-stat"><div class="as-val">${totalAmbil}</div><div class="as-lbl">Ambil sendiri</div></div>
+      <div class="antar-stat"><div class="as-val" style="font-size:12px">${rp(totalSisa)}</div><div class="as-lbl">Total sisa</div></div>
+    </div>
+  </div>`;
+
+  // Cards diantar
+  let antarCards='';
+  if(antar.length>0){
+    antarCards=`<div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Diantar (${antar.length})</div>`;
+    antarCards+=antar.map((d,i)=>{
+      const s=sold[d.no];
+      const dp=s.dp||0, sisa=s.harga-dp;
+      const mapsUrl=`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.alamat)}&travelmode=driving`;
+      const lunas=dp>=s.harga;
+      return`<div class="antar-card">
+        <div class="antar-row">
+          <div class="antar-num">${i+1}</div>
+          <div class="antar-info">
+            <div class="antar-buyer">${s.buyer||'(tanpa nama)'}</div>
+            <div class="antar-kode">${d.kode} · ${d.bobot.toFixed(1)} kg · #${d.no}</div>
+            <div class="antar-addr">📍 ${s.alamat}</div>
+            ${s.hp?`<div style="font-size:11px;color:#555;margin-top:3px">📱 <a href="tel:${s.hp}" style="color:#1565C0;font-weight:600">${s.hp}</a></div>`:''}
+            ${s.catatan?`<div style="font-size:11px;color:#888;margin-top:3px">📝 ${s.catatan}</div>`:''}
+          </div>
+          <div class="antar-right">
+            <div class="antar-harga">${rp(s.harga)}</div>
+            ${lunas?`<div class="antar-lunas">✅ Lunas</div>`:
+              `<div class="antar-sisa">Tagih ${rp(sisa)}</div>`}
+            <a href="${mapsUrl}" target="_blank" class="btn-maps">🗺️ Maps</a>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Cards ambil sendiri
+  let ambilCards='';
+  if(ambil.length>0){
+    ambilCards=`<div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px;margin:12px 0 8px">Ambil Sendiri (${ambil.length})</div>`;
+    ambilCards+=ambil.map(d=>{
+      const s=sold[d.no];
+      const dp=s.dp||0, sisa=s.harga-dp;
+      const lunas=dp>=s.harga;
+      return`<div class="antar-card">
+        <div class="antar-row">
+          <div class="antar-num ambil">🏠</div>
+          <div class="antar-info">
+            <div class="antar-buyer">${s.buyer||'(tanpa nama)'}</div>
+            <div class="antar-kode">${d.kode} · ${d.bobot.toFixed(1)} kg · #${d.no}</div>
+            <div class="antar-addr-ambil">Ambil ke kandang</div>
+            ${s.hp?`<div style="font-size:11px;color:#555;margin-top:3px">📱 <a href="tel:${s.hp}" style="color:#1565C0;font-weight:600">${s.hp}</a></div>`:''}
+            ${s.catatan?`<div style="font-size:11px;color:#888;margin-top:3px">📝 ${s.catatan}</div>`:''}
+          </div>
+          <div class="antar-right">
+            <div class="antar-harga">${rp(s.harga)}</div>
+            ${lunas?`<div class="antar-lunas">✅ Lunas</div>`:
+              `<div class="antar-sisa">Tagih ${rp(sisa)}</div>`}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  container.innerHTML=hero+mapsAllBtn+antarCards+ambilCards;
+}
+
+// ── CETAK INVOICE ─────────────────────────────────────────────────────
+function cetakInvoice(no){
+  const d=DOMBA.find(x=>x.no===no);
+  const s=sold[no];
+  if(!d||!s)return;
+  const dp=s.dp||0, sisa=s.harga-dp;
+  let statusLabel,statusColor,statusBg;
+  if(dp>=s.harga){statusLabel='LUNAS';statusColor='#1B5E20';statusBg='#E8F5E9';}
+  else if(dp>0)  {statusLabel='DP SEBAGIAN';statusColor='#E65100';statusBg='#FFF3E0';}
+  else           {statusLabel='BELUM DP';statusColor='#C62828';statusBg='#FFEBEE';}
+  const tgl=new Date().toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const invNo=`BQ-${String(no).padStart(3,'0')}-${new Date().getFullYear()}`;
+  const jenisHewan=d.tdk?'Domba Tanduk':'Domba Non Tanduk';
+  const hbLabel=d.isNew?`Rp 70.000/kg (beli) + Rp 100.000 ongkir`:`Rp ${d.hb.toLocaleString('id-ID')}/kg`;
+  const mapsLink=s.alamat?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.alamat)}`:'';
+  const html=`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Invoice ${invNo}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f0f0f0;padding:16px}.wrap{background:#fff;max-width:560px;margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.12)}.head{background:#2E7D32;color:#fff;padding:24px 26px 20px}.head h1{font-size:22px;font-weight:900}.head p{font-size:11px;opacity:.65;margin-top:3px}.inv-meta{background:#1B5E20;padding:14px 26px;display:flex;justify-content:space-between;align-items:center}.inv-meta .lbl{font-size:10px;color:rgba(255,255,255,.6);margin-bottom:2px}.inv-meta .val{font-size:13px;color:#fff;font-weight:700}.body{padding:22px 26px}.status-pill{display:inline-block;padding:6px 18px;border-radius:99px;font-size:13px;font-weight:800;background:${statusBg};color:${statusColor};margin-bottom:20px}.slbl{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.6px;margin:0 0 10px}.ibox{background:#F8F9F7;border-radius:10px;padding:14px 16px;margin-bottom:18px}.irow{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid #EEE;font-size:13px}.irow:last-child{border:none}.irow-l{color:#666;flex-shrink:0;margin-right:12px}.irow-r{font-weight:700;text-align:right}.total-box{background:#F1F8E9;border-radius:10px;padding:14px 16px;margin-bottom:18px}.maps-btn{display:block;width:100%;padding:11px;background:#1565C0;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;margin-bottom:8px}.print-btn{display:block;width:100%;padding:11px;background:#2E7D32;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;text-align:center}.foot{background:#F8F9F7;border-top:1px solid #EEE;padding:14px 26px;text-align:center;font-size:11px;color:#aaa;line-height:1.7}@media print{body{background:#fff;padding:0}.wrap{box-shadow:none;border-radius:0;max-width:100%}.no-print{display:none}}</style>
+</head><body><div class="wrap">
+<div class="head"><h1>Basmalahqu.id</h1><p>Hewan Qurban Terpercaya · Idul Adha 1447H / 2026</p></div>
+<div class="inv-meta"><div><div class="lbl">Nomor Invoice</div><div class="val">${invNo}</div></div><div style="text-align:right"><div class="lbl">Tanggal</div><div class="val" style="font-size:11px">${tgl}</div></div></div>
+<div class="body">
+<div class="status-pill">${statusLabel}</div>
+<div class="slbl">Data Pembeli</div>
+<div class="ibox">
+  <div class="irow"><span class="irow-l">Nama</span><span class="irow-r">${s.buyer||'—'}</span></div>
+  <div class="irow"><span class="irow-l">No HP / WA</span><span class="irow-r">${s.hp||'—'}</span></div>
+  <div class="irow"><span class="irow-l">Alamat Pengiriman</span><span class="irow-r" style="max-width:60%">${s.alamat||'Ambil sendiri ke kandang'}</span></div>
+</div>
+${s.alamat?`<div class="slbl">Info Pengiriman</div><div class="ibox" style="background:#FFF8E1;border:1px solid #FFE082"><div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:20px;flex-shrink:0">📍</span><div><div style="font-size:11px;color:#795548;margin-bottom:3px;font-weight:700">ANTAR KE ALAMAT</div><div style="font-size:14px;font-weight:700;line-height:1.5">${s.alamat}</div>${s.hp?`<div style="margin-top:6px;font-size:12px;color:#555">Konfirmasi: <b>${s.hp}</b></div>`:''}</div></div></div>`:''}
+<div class="slbl">Detail Hewan</div>
+<div class="ibox">
+  <div class="irow"><span class="irow-l">Kode</span><span class="irow-r">${d.kode} (#${d.no})</span></div>
+  <div class="irow"><span class="irow-l">Jenis</span><span class="irow-r">${jenisHewan}</span></div>
+  <div class="irow"><span class="irow-l">Bobot</span><span class="irow-r">${d.isBundling?d.ekor+' ekor × '+d.bobotPer+' kg = '+d.bobot+' kg total':d.bobot.toFixed(1)+' kg'}</span></div>
+  <div class="irow"><span class="irow-l">Harga beli/kg</span><span class="irow-r">${hbLabel}</span></div>
+  ${s.catatan?`<div class="irow"><span class="irow-l">Catatan</span><span class="irow-r">${s.catatan}</span></div>`:''}
+</div>
+<div class="slbl">Rincian Pembayaran</div>
+<div class="ibox">
+  <div class="irow"><span class="irow-l">Harga deal</span><span class="irow-r" style="color:#1565C0">${rp(s.harga)}</span></div>
+  <div class="irow"><span class="irow-l">DP dibayar</span><span class="irow-r" style="color:#2E7D32">${rp(dp)}</span></div>
+</div>
+<div class="total-box"><div class="irow"><span class="irow-l" style="font-weight:700;color:#1a1a1a;font-size:14px">Sisa Pelunasan</span><span class="irow-r" style="color:${sisa<=0?'#1B5E20':'#C62828'};font-size:18px;font-weight:900">${rp(sisa)}</span></div></div>
+${s.alamat?`<a href="${mapsLink}" target="_blank" class="maps-btn no-print">🗺️ Buka Alamat di Google Maps</a>`:''}
+<button class="print-btn no-print" onclick="window.print()">🖨️ Print Invoice</button>
+</div>
+<div class="foot"><b>Basmalahqu.id</b> · Kandang Tangerang Selatan<br>Terima kasih · Semoga ibadah qurban diterima 🤲</div>
+</div></body></html>`;
+  const win=window.open('','_blank');
+  if(win){
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  } else {
+    // Popup diblokir — fallback download
+    const a=document.createElement('a');
+    a.href='data:text/html;charset=utf-8,'+encodeURIComponent(html);
+    a.download='Invoice-BQ-'+String(no).padStart(3,'0')+'.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
+// ── SHARE INVOICE VIA WA ──────────────────────────────────
+function shareWA(no){
+  const d=DOMBA.find(x=>x.no===no);
+  const s=sold[no];
+  if(!d||!s)return;
+  const dp=s.dp||0, sisa=s.harga-dp;
+  const invNo='BQ-'+String(no).padStart(3,'0')+'-'+new Date().getFullYear();
+  const status=sisa<=0?'✅ LUNAS':dp>0?'DP '+rp(dp)+' · Sisa '+rp(sisa):'Belum DP · Total '+rp(s.harga);
+  const txt='🐑 *Invoice Qurban — Basmalahqu.id*\n'
+    +'━━━━━━━━━━━━━━━━━━━\n'
+    +'No. Invoice: *'+invNo+'*\n'
+    +'Hewan: '+d.kode+' · '+(d.isBundling?d.ekor+' ekor × '+d.bobotPer+' kg':d.bobot.toFixed(1)+' kg')+' · '+(d.tdk?'Tanduk':'Non Tanduk')+'\n\n'
+    +'👤 *'+(s.buyer||'Pembeli')+'*\n'
+    +'📱 '+(s.hp||'-')+'\n'
+    +(s.alamat?'📍 '+s.alamat:'🏠 Ambil sendiri ke kandang')+'\n\n'
+    +'💰 Harga deal: *'+rp(s.harga)+'*\n'
+    +status+'\n'
+    +(s.catatan?'📝 '+s.catatan+'\n':'')
+    +'━━━━━━━━━━━━━━━━━━━\n'
+    +'_Basmalahqu.id · Kandang Tangerang Selatan_\n'
+    +'_Semoga ibadah qurban diterima 🤲_';
+  const hp=s.hp?s.hp.replace(/^0/,'62').replace(/\D/g,''):'';
+  window.open('https://wa.me/'+hp+'?text='+encodeURIComponent(txt),'_blank');
+}
+
+// ── RENDER P&L ────────────────────────────────────────────────────────
+function renderPL(){
+  const allD=DOMBA;
+  const soldD=allD.filter(d=>sold[d.no]);
+  const ns=soldD.length;
+  const totalRevProj=allD.reduce((s,d)=>s+d.jNorm,0);
+  const totalHPP=allD.reduce((s,d)=>s+d.hpp,0);
+  const sapiConf=5000000,sapiEst=13000000;
+  const netProj=totalRevProj-totalHPP-OPEX+sapiConf+sapiEst;
+
+  const realisasiRev=soldD.reduce((s,d)=>s+sold[d.no].harga,0);
+  const realisasiHPP=soldD.reduce((s,d)=>s+d.hpp,0);
+  const realisasiDP =soldD.reduce((s,d)=>s+(sold[d.no].dp||0),0);
+  const sisaTagih=realisasiRev-realisasiDP;
+  const grossReal=realisasiRev-realisasiHPP;
+  const opexPorsi=Math.round(OPEX*(ns/allD.length));
+  const netReal=grossReal-opexPorsi;
+
+  document.getElementById('pl-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Laku</div><div class="stat-val sv-green">${ns} ekor</div></div>
+    <div class="stat-card"><div class="stat-label">Rev realisasi</div><div class="stat-val sv-blue" style="font-size:12px">${rp(realisasiRev)}</div></div>
+    <div class="stat-card"><div class="stat-label">DP terkumpul</div><div class="stat-val sv-orange" style="font-size:12px">${rp(realisasiDP)}</div></div>
+    <div class="stat-card"><div class="stat-label">Sisa ditagih</div><div class="stat-val sv-red" style="font-size:12px">${rp(sisaTagih)}</div></div>`;
+
+  document.getElementById('pl-body').innerHTML=`
+    <div class="pl-card">
+      <div class="pl-title">Proyeksi P&L — Semua Hewan (${allD.length} ekor)</div>
+      <div class="pl-row"><span class="pl-l">Total revenue proyeksi</span><span class="pl-r">${rp(totalRevProj)}</span></div>
+      <div class="pl-row"><span class="pl-l">Total HPP hewan</span><span class="pl-r sv-red">(${rp(totalHPP)})</span></div>
+      <div class="pl-row"><span class="pl-l">Opex kandang</span><span class="pl-r sv-red">(${rp(OPEX)})</span></div>
+      <div class="pl-row"><span class="pl-l">Sapi — confirmed</span><span class="pl-r sv-green">+${rp(sapiConf)}</span></div>
+      <div class="pl-row"><span class="pl-l">Sapi — estimasi</span><span class="pl-r sv-orange">+${rp(sapiEst)}</span></div>
+      <div class="pl-row"><span class="pl-l" style="font-weight:700;color:#1a1a1a">Net profit proyeksi</span><span class="pl-r ${netProj>=0?'sv-green':'sv-red'}" style="font-size:15px">${rp(netProj)}</span></div>
+      <div class="pl-row" style="background:#F1F8E9;margin:4px -14px -13px;padding:8px 14px;border-radius:0 0 12px 12px">
+        <span class="pl-l">Bagi hasil investor 50%</span>
+        <span class="pl-r sv-green" style="font-size:15px">${rp(netProj/2)}</span>
+      </div>
+    </div>
+    ${ns>0?`<div class="pl-card">
+      <div class="pl-title">Realisasi — ${ns} Ekor Laku</div>
+      <div class="pl-row"><span class="pl-l">Revenue dari domba laku</span><span class="pl-r">${rp(realisasiRev)}</span></div>
+      <div class="pl-row"><span class="pl-l">HPP domba laku</span><span class="pl-r sv-red">(${rp(realisasiHPP)})</span></div>
+      <div class="pl-row"><span class="pl-l">Gross margin (sebelum opex)</span><span class="pl-r ${grossReal>=0?'sv-green':'sv-red'}">${rp(grossReal)}</span></div>
+      <div class="pl-row"><span class="pl-l">Opex porsi ${ns} ekor</span><span class="pl-r sv-red">(${rp(opexPorsi)})</span></div>
+      <div class="pl-row"><span class="pl-l" style="font-weight:700;color:#1a1a1a">Net realisasi</span><span class="pl-r ${netReal>=0?'sv-green':'sv-red'}" style="font-size:15px">${rp(netReal)}</span></div>
+      <div class="pl-row"><span class="pl-l">DP terkumpul</span><span class="pl-r sv-green">${rp(realisasiDP)}</span></div>
+      <div class="pl-row"><span class="pl-l">Sisa yang harus ditagih</span><span class="pl-r sv-orange">${rp(sisaTagih)}</span></div>
+      <div class="pl-row" style="background:#F1F8E9;margin:4px -14px -13px;padding:8px 14px;border-radius:0 0 12px 12px">
+        <span class="pl-l">Bagi hasil investor 50%</span>
+        <span class="pl-r ${netReal>=0?'sv-green':'sv-red'}" style="font-size:15px">${rp(netReal/2)}</span>
+      </div>
+    </div>`:'<div class="nodata" style="padding:2rem">Belum ada yang laku</div>'}`;
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────────
+function showTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',['domba','sapi','invoice','antar','pl'][i]===name);
+  });
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='invoice')renderInvoice();
+  if(name==='antar')renderAntar();
+  if(name==='pl')renderPL();
+}
+
+// ── RESET DATA ────────────────────────────────────────────────────────
+function confirmReset(){
+  if(!confirm('Reset semua data laku? Data yang sudah diisi akan terhapus permanen.'))return;
+  Object.keys(sold).forEach(k=>delete sold[k]);
+  cloudSave();
+  expanded=null;
+  renderDomba(); renderInvoice(); renderAntar(); renderPL(); updateSavedIndicator();
+}
+
+function updateSavedIndicator(){
+  const el=document.getElementById('hdr-saved');
+  if(!el)return;
+  const n=Object.keys(sold).length;
+  const now=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  el.textContent=n>0?`💾 ${n} data tersimpan · ${now}`:'💾 tersimpan';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+// Tampilkan UI dulu dengan data localStorage (instant),
+// lalu load dari cloud dan update
+(async()=>{
+  // Tampilkan banner setup kalau BIN_ID belum diganti
+  if(GAS_URL==='GANTI_GAS_URL_ANDA'){
+    const b=document.getElementById('setup-banner');
+    if(b) b.style.display='block';
+  }
+  // 1. Load localStorage dulu supaya tidak blank
+  try{
+    const raw=localStorage.getItem('basmalahqu_v1');
+    if(raw){const s=JSON.parse(raw);Object.keys(s).forEach(k=>{sold[k]=s[k];});}
+  }catch(e){}
+  renderDomba(); renderPL(); updateSavedIndicator();
+  // 2. Load cloud — update kalau ada data lebih baru
+  const ok=await cloudLoad();
+  if(ok){ renderDomba(); renderInvoice(); renderAntar(); renderPL(); updateSavedIndicator(); }
+  // 3. Auto-refresh setiap 30 detik
+  startAutoRefresh();
+})();
+</script>
+</body>
+</html>
