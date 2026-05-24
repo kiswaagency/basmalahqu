@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{height:100%;height:-webkit-fill-available}
-body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:#F5F4F0;color:#1C1917;font-size:14px;display:flex;flex-direction:column;width:100%;max-width:480px;margin:0 auto;-webkit-font-smoothing:antialiased;min-height:100%;min-height:-webkit-fill-available;overflow:hidden}
+html,body{height:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:#F5F4F0;color:#1C1917;font-size:14px;display:flex;flex-direction:column;max-width:480px;margin:0 auto;-webkit-font-smoothing:antialiased;height:100%;height:100dvh}
 .hdr{background:linear-gradient(135deg,#1B5E20 0%,#2E7D32 100%);color:#fff;padding:14px 16px 12px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,.15)}
 .hdr-top{display:flex;justify-content:space-between;align-items:flex-start}
 .hdr h1{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;letter-spacing:.2px;line-height:1.1}
@@ -19,7 +19,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;backgrou
 .tabs{display:flex;background:#fff;border-bottom:1px solid #ECEAE4;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .tab{flex:1;padding:11px 2px 9px;font-size:9.5px;font-weight:700;text-align:center;cursor:pointer;border:none;background:none;color:#A8A29E;border-bottom:2px solid transparent;letter-spacing:.3px;text-transform:uppercase;transition:color .15s}
 .tab.active{color:#2E7D32;border-bottom-color:#2E7D32}
-.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F5F4F0;overscroll-behavior:contain}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F5F4F0;overscroll-behavior:contain;min-height:0}
 .section{display:none;padding:14px 13px 100px}
 .section.active{display:block}
 /* STAT */
